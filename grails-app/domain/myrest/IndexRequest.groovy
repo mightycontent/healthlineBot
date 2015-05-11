@@ -1,8 +1,6 @@
 package myrest
 
-import grails.rest.Resource
 
-@Resource(uri= '/reqs', formats = ['json', 'xml'])
 class IndexRequest {
     String partner_id
     String profile_id
