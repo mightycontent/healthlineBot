@@ -22,11 +22,9 @@ class IndexDocService {
                     tags = tags()
                 }
             }
-            println resp
             //update the status to ok.
             req.status = "ok"
             req.save(flush: true)
-            sleep(5000)
         }
         return queued.size()
     }
