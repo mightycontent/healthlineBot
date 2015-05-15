@@ -9,19 +9,26 @@ class IndexDocService {
         def rest = new RestBuilder()
         List queued = IndexRequest.findAllWhere(status: "queued")
         queued.each { req ->
-            println "request: ${req.doc_id} is ready!"
+            log.info "request: ${req.doc_id} is about to be processed!"
             // call the callback_url with and return
-            def callBack = req.callback_url ?: 'http://google.com'
-            def resp = rest.put(callBack) {
-                contentType('application/json')
-                json {
-                    partner_id = req.partner_id
-                    profile_id = req.profile_id
-                    doc_id = req.doc_id
-                    status = req.status
-                    tags = tags()
+            def callBack = req.callback_url ?: 'http://localhost'
+            try {
+                def resp = rest.put(callBack) {
+                    contentType('application/json')
+                    json {
+                        partner_id = req.partner_id
+                        profile_id = req.profile_id
+                        doc_id = req.doc_id
+                        status = req.status
+                        tags = tags()
+                    }
                 }
+
             }
+            catch (Exception e) {
+                log.error "In IndexDocServer.send(), caught exception: ${e.dump()}"
+            }
+
             //update the status to ok.
             req.status = "ok"
             req.save(flush: true)

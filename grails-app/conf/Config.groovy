@@ -92,6 +92,7 @@ environments {
     development {
         grails.logging.jul.usebridge = true
     }
+
     production {
         grails.logging.jul.usebridge = false
         // TODO: grails.serverURL = "http://www.changeme.com"
@@ -99,14 +100,30 @@ environments {
 }
 
 // log4j configuration
+def catalinaBase = System.properties.getProperty('catalina.base')
+if (!catalinaBase) catalinaBase = './target'   // just in case
+def logDirectory = "${catalinaBase}/logs"
+
 log4j.main = {
     // Example of changing the log pattern for the default console appender:
     //
     //appenders {
     //    console name:'stdout', layout:pattern(conversionPattern: '%c{2} %m%n')
     //}
+    appenders {
+        rollingFile name:"CONSOLE1",
+                maxFileSize:"10MB",
+                maxBackupIndex:10,
+                layout: pattern(conversionPattern: "%d{ISO8601} [%x] [%p] [%c{3}] [%t] [%r] %m%n"),
+                file: "${logDirectory}/healthlineBot.log"
+    }
+    root {
+        //info("console", "logFile")
+        //additivity = true
+        info 'stdout','CONSOLE1'
+    }
 
-    error  'org.codehaus.groovy.grails.web.servlet',        // controllers
+/*    error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts
            'org.codehaus.groovy.grails.web.mapping.filter', // URL mapping
@@ -116,5 +133,5 @@ log4j.main = {
            'org.codehaus.groovy.grails.orm.hibernate',      // hibernate integration
            'org.springframework',
            'org.hibernate',
-           'net.sf.ehcache.hibernate'
+           'net.sf.ehcache.hibernate'*/
 }

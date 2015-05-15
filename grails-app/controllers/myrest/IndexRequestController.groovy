@@ -15,16 +15,18 @@ class IndexRequestController {
     // this action gets mapped to url /tagstatus in the /config/UrlMappings
     def status(IndexRequest indexRequestInstance) {
         if (indexRequestInstance == null) {
+            log.info "tagStatus request not found."
             notFound()
             return
         }
         List excludeProps = ['class', 'id', 'content']
         // doc_id is set to the object's unique id
         indexRequestInstance.doc_id = indexRequestInstance.id.toString()
+        log.info "received tagStatus request: ${indexRequestInstance.id}"
         Map tags = [:]
         indexRequestInstance.properties.each { key, value ->
 
-            println "key ${key} value ${value}"
+            //println "key ${key} value ${value}"
             if (!(key.toString() in excludeProps)) {
                 tags.put(key,value)
             }
