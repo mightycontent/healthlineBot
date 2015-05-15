@@ -10,9 +10,10 @@ class IndexDocService {
         List queued = IndexRequest.findAllWhere(status: "queued")
         queued.each { req ->
             log.info "request: ${req.doc_id} is about to be processed!"
-            // call the callback_url with and return
+            // call the callback_url and return
             def callBack = req.callback_url ?: 'http://localhost'
             try {
+                // make the call using restBuilder
                 def resp = rest.put(callBack) {
                     contentType('application/json')
                     json {
@@ -23,13 +24,15 @@ class IndexDocService {
                         tags = tags()
                     }
                 }
+                log.info "Callback to url: ${callBack} returned a status of: ${resp.status}, ${resp.statusCode.getReasonPhrase()}"
 
             }
             catch (Exception e) {
-                log.error "In IndexDocServer.send(), caught exception: ${e.dump()}"
+                // most likely we can't reach teh provided callback
+                log.error "In IndexDocServer.send(), caught exception: ${e.message}"
             }
 
-            //update the status to ok.
+            //update the status to ok. Do this even if callBack failed to prevent retrying infinately
             req.status = "ok"
             req.save(flush: true)
         }

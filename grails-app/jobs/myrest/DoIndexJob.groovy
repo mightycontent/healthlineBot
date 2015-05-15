@@ -13,7 +13,7 @@ class DoIndexJob {
 
     def execute() {
         // execute job
-        log.info "Executing IndexDocService"
+        //log.info "Executing IndexDocService"
         log.info "Processed ${IndexDocService.send()} request(s)"
     }
 }
