@@ -28,7 +28,7 @@ class IndexDocService {
 
             }
             catch (Exception e) {
-                // most likely we can't reach teh provided callback
+                // most likely we can't reach the provided callback
                 log.error "In IndexDocServer.send(), caught exception: ${e.message}"
             }
 
@@ -43,7 +43,7 @@ class IndexDocService {
         return tags()
     }
 
-    private List tags() {
+    private static List tags() {
         Map sample = [
                 'concept_rank'                  : 1,
                 'score'                         : 118.99007,
@@ -76,19 +76,6 @@ class IndexDocService {
                 'synonyms'                      : null,
                 'parents'                       : [2790985: 'Bronchitis', 8108501: 'Acute Respiratory Disease', 8117662: 'Acute Inflammatory Disease'],
                 'children'                      : [4974716: 'Acute Bronchitis Causes', 4974714: 'Acute Bronchitis Risk Factors', 4974713: 'Acute Bronchitis Symptoms']
-        ]
-        def concept1 = [
-                name    : "conceptName",
-                score   : 0.123,
-                somelist: ["item1", "item2", "item3"],
-                somemap : ['key1': 'value1', 'key2': 'value2']
-        ]
-
-        def concept2 = [
-                name    : "conceptName",
-                score   : 0.123,
-                somelist: ["item1", "item2", "item3"],
-                somemap : ['key1': 'value1', 'key2': 'value2']
         ]
 
         return [sample]

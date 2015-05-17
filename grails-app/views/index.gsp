@@ -117,17 +117,18 @@
 
     <p>Source for the project can be found on <a href="https://github.com/mightycontent/healthlineBot">github</a></p>
 
-    <p>When a POST call is made to /tag method the system returns a doc_id.  A quartz job that runs every 20 seconds
+    <p>When a POST call is made to the /tag method the system returns a doc_id.  A quartz job runs every 20 seconds and
     looks for all indexing requests with a status of 'queued'. For each one it will make a GET call to the callback_url
-    provided in the /tag request. Whether sucessful or not, the system currently changes the status of the request to 'ok'.
+    provided in the /tag request. Whether successful or not, the system currently changes the status of the request to
+    'ok'.
     </p>
     <p>The /tagstatus method was also implemented per the provided specification. This synchronous returns the status
     for a given request.</p>
-    <p>The calls will always return the same set of tags.  The JSON tag object is understood to be a list containing up to
-    three concepts. The tag object returned by this program is based on samples that were received in CSV format so their
-    final representation may change.</p>
+    <p>The calls will always return the same set of tags. The JSON tag object is understood to be a list containing up
+    to three concepts. The tag object returned by this program is based on samples that were received in CSV format so
+    their final representation may change.</p>
 
-    <p>Example calls shown below: <script src="https://gist.github.com/mightycontent/c1a54309316b189fadb6.js"></script>
+    <p>Example calls are shown below: <script src="https://gist.github.com/mightycontent/c1a54309316b189fadb6.js"></script>
     </p>
 
 
