@@ -13,22 +13,24 @@ class IndexRequestController {
     def IndexDocService
 
     // this action gets mapped to url /tagstatus in the /config/UrlMappings
-    def status(IndexRequest indexRequestInstance) {
+    def status() {
+        final List EXCLUDE_PROPS = ['class', 'id', 'content']
+
+        IndexRequest indexRequestInstance = IndexRequest.findByDoc_id(params.doc_id)
         if (indexRequestInstance == null) {
             log.info "tagStatus request not found."
             notFound()
             return
         }
-        List excludeProps = ['class', 'id', 'content']
-        // doc_id is set to the object's unique id
-        indexRequestInstance.doc_id = indexRequestInstance.id.toString()
-        log.info "received tagStatus request: ${indexRequestInstance.id}"
+
+        // doc_id is pass in on url, and is mapped in UrlMappings config
+        log.info "received tagStatus request: ${indexRequestInstance.doc_id}"
         Map tags = [:]
         indexRequestInstance.properties.each { key, value ->
 
             //println "key ${key} value ${value}"
-            if (!(key.toString() in excludeProps)) {
-                tags.put(key,value)
+            if (!(key.toString() in EXCLUDE_PROPS)) {
+                tags.put(key, value)
             }
         }
 
@@ -51,8 +53,6 @@ class IndexRequestController {
             return
         }
         indexRequestInstance.save flush: true
-
-        indexRequestInstance.doc_id = indexRequestInstance.id.toString()
         respond indexRequestInstance, [excludes: ['class', 'id', 'content', 'callback_url']]
     }
 

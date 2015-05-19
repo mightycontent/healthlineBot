@@ -7,7 +7,7 @@ class UrlMappings {
             }
         }
         "/tag"(controller: "IndexRequest", action: "save")
-        "/tagstatus/$id?(.$format)?"(controller: "IndexRequest", action: "status")
+        "/tagstatus/$doc_id?(.$format)?"(controller: "IndexRequest", action: "status")
         "/"(view: "/index")
         "500"(view: '/error')
     }

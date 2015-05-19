@@ -5,6 +5,7 @@ class BootStrap {
 
     def init = { servletContext ->
         def req = new IndexRequest(
+                doc_id: "myRSuiteId",
                 partner_id: "b975e778-a19d-11e4-89d3-123b93f75cba",
                 profile_id: "b975e_profile",
                 content: "<html><head><title>The quick brown fox</title></head><body>The quick brown fox ran over the lazy dog</body></html>",

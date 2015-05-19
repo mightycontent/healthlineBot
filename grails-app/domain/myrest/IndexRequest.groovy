@@ -13,7 +13,8 @@ class IndexRequest {
     static constraints = {
         partner_id nullable: false
         profile_id nullable: false
-        doc_id nullable: true
+        doc_id nullable: false  // this value is passed in as the handle to which the partner's system will identify
+                                // the document.  The healthline system will remember it.
         content nullable: true
         callback_url url: true
         command nullable: true
