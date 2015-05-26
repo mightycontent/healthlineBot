@@ -66,16 +66,16 @@ class IndexDocService {
                 'ndc'                           : null,
                 'rxnorm'                        : null,
                 'snomed'                        : [266380005, 195713004, 155512004, 10509002],
-                'treatments'                    : [8129222: 'Drink Plenty of Fluids', 8098518: 'Mist (Humidifying) Inhalation Therapy', 5344572: 'Rest', 8129498: 'Symptom Management', 8098398: 'Antibiotic Therapy', 8107498: 'Influenza vaccination', 8841858: 'High zinc diet'],
-                'physicians'                    : [8111909: 'Internist', 8111907: 'Pulmonologist', 8111905: 'Family Practice Physician'],
-                'diagnostics'                   : [5345712: 'Chest X-Ray', 5343665: 'History and Physical Exam', 8092555: 'Respiratory System Examination'],
-                'symptoms'                      : [3815056: 'Cough', 5047360: 'Fever', 5047919: 'Wheezing', 5344093: 'Shortness of Breath'],
+                'treatments'                    : ['Drink Plenty of Fluids', 'Mist (Humidifying) Inhalation Therapy','Rest', 'Symptom Management','Antibiotic Therapy', 'Influenza vaccination', 'High zinc diet'],
+                'physicians'                    : ['Internist','Pulmonologist', 'Family Practice Physician'],
+                'diagnostics'                   : ['Chest X-Ray', 'History and Physical Exam', 'Respiratory System Examination'],
+                'symptoms'                      : ['Cough', 'Fever', 'Wheezing', 'Shortness of Breath'],
                 'diseases'                      : null,
-                'drug_brands'                   : [8005095: 'Biaxin XL', 8124118: 'Biaxin XL-Pak', 2793403: 'Biaxin'],
-                'drug_generic'                  : [2792288: 'clarithromycin', 2790827: 'albuterol', 8128221: 'codeine-guaifenesin', 8128426: 'sulfamethoxazole-trimethoprim'],
+                'drug_brands'                   : ['Biaxin XL','Biaxin XL-Pak', 'Biaxin'],
+                'drug_generic'                  : ['clarithromycin', 'albuterol', 'codeine-guaifenesin', 'sulfamethoxazole-trimethoprim'],
                 'synonyms'                      : null,
-                'parents'                       : [2790985: 'Bronchitis', 8108501: 'Acute Respiratory Disease', 8117662: 'Acute Inflammatory Disease'],
-                'children'                      : [4974716: 'Acute Bronchitis Causes', 4974714: 'Acute Bronchitis Risk Factors', 4974713: 'Acute Bronchitis Symptoms']
+                'parents'                       : ['Bronchitis', 'Acute Respiratory Disease', 'Acute Inflammatory Disease'],
+                'children'                      : ['Acute Bronchitis Causes', 'Acute Bronchitis Risk Factors', 'Acute Bronchitis Symptoms']
         ]
 
         return [sample]
