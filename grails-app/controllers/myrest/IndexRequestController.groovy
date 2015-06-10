@@ -73,6 +73,10 @@ class IndexRequestController {
     }
 
     def show(IndexRequest indexRequestInstance) {
+        if (indexRequestInstance == null) {
+            notFound()
+            return
+        }
         indexRequestInstance.doc_id = indexRequestInstance.id.toString()
         respond indexRequestInstance, [excludes: ['class', 'id']]
     }

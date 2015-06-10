@@ -2,6 +2,7 @@ package myrest
 
 import grails.plugins.rest.client.RestBuilder
 import grails.test.mixin.TestFor
+import org.codehaus.groovy.grails.web.servlet.HttpHeaders
 import org.springframework.http.HttpMethod
 import org.springframework.http.HttpStatus
 import org.springframework.test.web.client.MockRestServiceServer
@@ -49,6 +50,10 @@ class IndexDocServiceSpec extends Specification {
                 .andExpect(method(HttpMethod.PUT))
                 .andExpect(content().contentType("application/json"))
                 .andExpect(content().string('{"doc_id":"12345"}'))
+        //TODO this check should catch the authorization header however the client usaully attemps a
+        // challenge and response.  client send no authorizaiton, server repsoned w/ 403 then client sends the
+        // header
+                //.andExpect(header(HttpHeaders.AUTHORIZATION, anything()))
                 .andRespond(withStatus(HttpStatus.CREATED))
 
         mockServer

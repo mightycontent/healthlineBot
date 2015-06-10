@@ -10,8 +10,12 @@ class IndexRequestControllerSpec extends Specification {
 
     def populateValidParams(params) {
         assert params != null
-        // TODO: Populate valid properties like...
-        //params["name"] = 'someValidName'
+        params['doc_id']        = "myRSuiteId"
+        params['partner_id']    = "b975e778-a19d-11e4-89d3-123b93f75cba"
+        params['profile_id']    = "b975e_profile"
+        params['content']       = "<html><head><title>The quick brown fox</title></head><body>The quick brown fox ran over the lazy dog</body></html>"
+        params['callback_url']  = "http://api.partner.com/healthline/handle_callback"
+        params['command']       = "update"
     }
 
     void "Test the index action returns the correct model"() {
@@ -33,6 +37,7 @@ class IndexRequestControllerSpec extends Specification {
     }
 
     void "Test the save action correctly persists an instance"() {
+        def beforecount = IndexRequest.count
 
         when: "The save action is executed with an invalid instance"
         request.contentType = FORM_CONTENT_TYPE
@@ -47,31 +52,29 @@ class IndexRequestControllerSpec extends Specification {
 
         when: "The save action is executed with a valid instance"
         response.reset()
+        // assuming save worked
         populateValidParams(params)
         indexRequest = new IndexRequest(params)
-
+        indexRequest.validate()
         controller.save(indexRequest)
 
-        then: "A redirect is issued to the show action"
-        response.redirectedUrl == '/indexRequest/show/1'
-        controller.flash.message != null
-        IndexRequest.count() == 1
+        then: "The count is incremented"
+        IndexRequest.count() == beforecount + 1
+
+        when: "A domain instance is passed to the show action"
+        def indexRequest2 = new IndexRequest(['doc_id':'myRSuiteId'])
+        controller.show(indexRequest2)
+
+        then: "we get an OK resonse"
+        response.status == 200
     }
 
-    void "Test that the show action returns the correct model"() {
+    void "Test the show action "() {
         when: "The show action is executed with a null domain"
         controller.show(null)
 
         then: "A 404 error is returned"
         response.status == 404
-
-        when: "A domain instance is passed to the show action"
-        populateValidParams(params)
-        def indexRequest = new IndexRequest(params)
-        controller.show(indexRequest)
-
-        then: "A model is populated containing the domain instance"
-        model.indexRequestInstance == indexRequest
     }
 
     void "Test that the edit action returns the correct model"() {

@@ -15,7 +15,9 @@ class IndexDocService {
             try {
                 // make the call using restBuilder
                 def resp = rest.put(callBack) {
-                    contentType('application/json')
+                    auth 'healthline', 'linehealth'
+                    //header ('Authorization', "Basic ${"healthline:linehealth".bytes.encodeBase64().toString()}")
+                    contentType 'application/json'
                     json {
                         partner_id = req.partner_id
                         profile_id = req.profile_id
