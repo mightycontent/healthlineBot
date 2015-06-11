@@ -1,7 +1,7 @@
 package myrest
 
 import grails.converters.JSON
-
+import org.codehaus.groovy.grails.web.json.JSONObject
 
 import static org.springframework.http.HttpStatus.*
 import grails.transaction.Transactional
@@ -54,6 +54,35 @@ class IndexRequestController {
         }
         indexRequestInstance.save flush: true
         respond indexRequestInstance, [excludes: ['class', 'id', 'content', 'callback_url']]
+    }
+    // this action get mapped to /tags in UrlMappings
+    @Transactional
+    def saveJson() {
+        // in this method, the body contains the JSON of the form
+        //"{doc_id":"8","partner_id":"b975e778-a19d-11e4-89d3-123b93f75cba",
+        // "profile_id":"b975e_profile","command":"update",
+        // "content" : "<html><head><title>The quick brown fox</title></head><body>The quick brown fox ran over the lazy dog</body></html>",
+        // callback_url="http://api.partner.com/handle_callback"}
+        JSONObject json = request.JSON
+        if (json.isEmpty()) {
+            notFound()
+            return
+        }
+        def indexRequestInstance = new IndexRequest()
+        // do exclicit binding
+        indexRequestInstance.doc_id     =   json.doc_id
+        indexRequestInstance.partner_id =   json.partner_id
+        indexRequestInstance.command    =   json.command
+        indexRequestInstance.profile_id =   json.profile_id
+        indexRequestInstance.content    =   json.content
+        indexRequestInstance.callback_url = json.callback_url
+        indexRequestInstance.status       = "queued"
+        if (indexRequestInstance.hasErrors()) {
+            respond indexRequestInstance.errors, view: 'create'
+            return
+        }
+        indexRequestInstance.save flush: true
+        respond indexRequestInstance, [formats:['json', 'xml'], excludes: ['class', 'id', 'content', 'callback_url']]
     }
 
     protected void notFound() {

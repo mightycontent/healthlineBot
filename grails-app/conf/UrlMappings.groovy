@@ -6,7 +6,7 @@ class UrlMappings {
                 // apply constraints here
             }
         }
-        "/tag"(controller: "IndexRequest", action: "save")
+        "/tag"(controller: "IndexRequest", action: "saveJson")
         "/tagstatus/$doc_id?(.$format)?"(controller: "IndexRequest", action: "status")
         "/"(view: "/index")
         "500"(view: '/error')
