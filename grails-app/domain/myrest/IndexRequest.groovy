@@ -15,7 +15,7 @@ class IndexRequest {
         profile_id nullable: false
         doc_id nullable: false  // this value is passed in as the handle to which the partner's system will identify
                                 // the document.  The healthline system will remember it.
-        content nullable: true
+        content nullable: true, maxSize: 1048576
         callback_url url: true
         command nullable: true
         status inList: ["unknown", "queued", "ok", "fail"]
