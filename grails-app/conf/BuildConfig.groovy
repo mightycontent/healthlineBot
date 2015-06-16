@@ -64,6 +64,9 @@ grails.project.dependency.resolution = {
         // added for scheduling
         compile ':quartz:1.0.2'
         compile ":rest-client-builder:2.1.1"
+        // adds support for HttpBuilder
+        compile ":rest:0.8"
+
 
         // plugins needed at runtime but not for compilation
         runtime ":hibernate4:4.3.6.1" // or ":hibernate:3.6.10.18"

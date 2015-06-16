@@ -2,6 +2,11 @@ package myrest
 
 import grails.transaction.Transactional
 import grails.plugins.rest.client.RestBuilder
+import groovyx.net.http.ContentType
+import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.Method
+import groovyx.net.http.ContentType.*
+
 
 @Transactional
 class IndexDocService {
@@ -14,7 +19,9 @@ class IndexDocService {
             def callBack = req.callback_url ?: 'http://localhost'
             try {
                 // make the call using restBuilder
-                def resp = rest.put(callBack) {
+                // In this version we expect the json to be in the body as per healthline spec
+                // appaently RSuite can not accept data in body.
+/*                def resp = rest.put(callBack) {
                     auth 'healthline', 'linehealth'
                     //header ('Authorization', "Basic ${"healthline:linehealth".bytes.encodeBase64().toString()}")
                     contentType 'application/json'
@@ -26,7 +33,24 @@ class IndexDocService {
                         tags = tags()
                     }
                 }
-                log.info "Callback to url: ${callBack} returned a status of: ${resp.status}, ${resp.statusCode.getReasonPhrase()}"
+                */
+                // this implementation sends the JSON response as a query param named file
+                // the was probably should be a content type of multi-part/form but, team want URLENC
+                //
+
+                def builder = new HTTPBuilder(callBack)
+
+                builder.auth.basic('healthline', 'linehealth')
+                builder.request(Method.PUT,ContentType.URLENC) { req2->
+                    uri.query = ['file': 'some object']
+
+                    response.success = { resp, reader ->
+                        log.info "Callback to url: ${callBack} returned a status of: ${resp.status}, ${resp.statusCode.getReasonPhrase()}"
+                    }
+                    response.failure = { resp, reader ->
+                        log.info "Drat! Callback to url: ${callBack} returned a status of: ${resp.status}, ${resp.statusCode.getReasonPhrase()}"
+                    }
+                }
 
             }
             catch (Exception e) {
