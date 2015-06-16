@@ -2,6 +2,7 @@ package myrest
 
 import grails.transaction.Transactional
 import grails.plugins.rest.client.RestBuilder
+import groovy.json.JsonBuilder
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
@@ -18,10 +19,11 @@ class IndexDocService {
             // call the callback_url and return
             def callBack = req.callback_url ?: 'http://localhost'
             try {
+/*
                 // make the call using restBuilder
                 // In this version we expect the json to be in the body as per healthline spec
                 // appaently RSuite can not accept data in body.
-/*                def resp = rest.put(callBack) {
+                def resp = rest.put(callBack) {
                     auth 'healthline', 'linehealth'
                     //header ('Authorization', "Basic ${"healthline:linehealth".bytes.encodeBase64().toString()}")
                     contentType 'application/json'
@@ -33,22 +35,35 @@ class IndexDocService {
                         tags = tags()
                     }
                 }
-                */
+*/
                 // this implementation sends the JSON response as a query param named file
                 // the was probably should be a content type of multi-part/form but, team want URLENC
                 //
 
                 def builder = new HTTPBuilder(callBack)
 
+                def json = new JsonBuilder()
+                def root = json {
+                    'partner_id'    req.partner_id
+                    'profile_id'    req.profile_id
+                    'doc_id'        req.doc_id
+                    'status'        req.status
+                    'tags'          this.tags
+                }
+                log.info "json: ${json.toString()}"
+
                 builder.auth.basic('healthline', 'linehealth')
                 builder.request(Method.PUT,ContentType.URLENC) { req2->
-                    uri.query = ['file': 'some object']
+                    uri.query = ['file': json.toString()]
 
                     response.success = { resp, reader ->
-                        log.info "Callback to url: ${callBack} returned a status of: ${resp.status}, ${resp.statusCode.getReasonPhrase()}"
+                        // restbuilder
+                        // log.info "Callback to url: ${callBack} returned a status of: ${resp.status}, ${resp.statusCode.getReasonPhrase()}"
+                        log.info "Callback to url: ${callBack} returned as status code of ${resp.status}, ${resp.statusLine}"
                     }
                     response.failure = { resp, reader ->
-                        log.info "Drat! Callback to url: ${callBack} returned a status of: ${resp.status}, ${resp.statusCode.getReasonPhrase()}"
+                        //log.info "Drat! Callback to url: ${callBack} returned a status of: ${resp.status}, ${resp.statusCode.getReasonPhrase()}"
+                        log.info "Drat, Callback to url: ${callBack} returned as status code of ${resp.status}, ${resp.statusLine}"
                     }
                 }
 
@@ -58,7 +73,7 @@ class IndexDocService {
                 log.error "In IndexDocServer.send(), caught exception: ${e.message}"
             }
 
-            //update the status to ok. Do this even if callBack failed to prevent retrying infinately
+            //update the status to ok. Do this even if callBack failed to prevent retrying infinately*/
             req.status = "ok"
             req.save(flush: true)
         }
